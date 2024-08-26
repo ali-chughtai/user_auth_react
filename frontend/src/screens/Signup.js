@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../styles/Signup.css';
 import { useNavigate } from 'react-router-dom';
 
-function HomeScreen() {
+function SignUp() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -26,6 +26,8 @@ function HomeScreen() {
                 body: JSON.stringify(raw),
             });
 
+
+
             const result = await response.text();
             console.log(result);
 
@@ -40,6 +42,7 @@ function HomeScreen() {
             console.error("Error during registration:", err);
         }
     };
+
 
     return (
         <div className='mainDiv'>
@@ -71,8 +74,10 @@ function HomeScreen() {
                 />
                 <button type='submit'>Register</button>
             </form>
+            <h6>already have an account? <span style={{userSelect:'none' , textDecoration:'underline' ,  color:'purple' , fontStyle:'italic'}} onClick={() => navigate('/login')} > Sign in</span></h6>
+
         </div>
     );
 }
 
-export default HomeScreen;
+export default SignUp;
