@@ -26,6 +26,7 @@ function Login() {
       };
   
       const response = await fetch("http://localhost:3000/users/login", requestOptions);
+      // console.log("response inam =============== : \n", response)
       const result = await response.json();
       if (result.message === "Success") {
         localStorage.setItem('token',result.token)

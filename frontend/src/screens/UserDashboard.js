@@ -14,15 +14,16 @@ function UserDashboard() {
       }
 
       try {
-        const response = await fetch("http://localhost:3000/users/dashboard", {
-          method: "GET",
-          headers: {
-            "Authorization": token,
-          },
-        });
-
+            
+            const response = await fetch("http://localhost:3000/users/dashboard", {
+              method: "GET",
+              headers: {
+                "Authorization": token,
+              },
+            });
+            
         const result = await response.json();
-        alert( JSON.stringify(result.user) )
+        console.log("Result======>" , result);
         if (response.ok) {
           setUser(result.user);
         } else {
@@ -44,7 +45,7 @@ function UserDashboard() {
 
   return (
     <div>
-      <h1>Welcome {user ? user.email : 'User'}</h1>
+      <h1>Welcome {user ? user.name : 'User'}</h1>
       <button onClick={logout}>Logout</button>
     </div>
   );

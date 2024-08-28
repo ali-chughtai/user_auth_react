@@ -20,7 +20,7 @@ exports.loginUser = async (req, res) => {
     console.log(" ======== Api Hit ========= ")
     const { email, password } = req.body;
     var user = await User.findOne({ email: email });
-    // console.log("User:", user);
+    console.log("User:", user);
 
     if (!user) {
       return res.status(404).json({ message: "User Not Found" });
@@ -29,7 +29,7 @@ exports.loginUser = async (req, res) => {
     if (!match) {
       return res.status(401).json({ message: "Email or password doesn't match" });
     }
-    const token = jwt.sign({ id: user._id, email: user.email },
+    const token = jwt.sign({user},
       'edhf345h876hrh587i#@485&345&$(*&)4543jggekrer',
       { expiresIn: '1h' }
     );

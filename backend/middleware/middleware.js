@@ -1,17 +1,22 @@
 const jwt = require('jsonwebtoken');
-var User = import('../models/user.js')
+const User = require('../models/user.js');
+// var User = import('../models/user.js')
 
-function authenticateToken(req, res, next) {
-    const token = req.headers['authorization'];
-
-    if (!token) return res.sendStatus(401);
-
-    jwt.verify(token, 'edhf345h876hrh587i#@485&345&$(*&)4543jggekrer', (err, user) => {
-        if (err) return res.sendStatus(403);
-        if (!user) return res.sendStatus(404);
-        req.user = user;
-        next();
-    });
+const authenticateToken =  async (req, res, next) =>{
+    try {
+        console.log(" ===== authenticateToken middleware called =====")
+        
+        const token = req.headers['authorization'];
+    
+        if (!token) return res.sendStatus(401)
+    
+        const decoded = await jwt.verify(token, 'edhf345h876hrh587i#@485&345&$(*&)4543jggekrer');
+        req.user = decoded.user;
+        next()
+    // }
+    } catch (error) {
+        console.log("middleware error : ", error)
+    }
 }
 
 module.exports = { authenticateToken };
