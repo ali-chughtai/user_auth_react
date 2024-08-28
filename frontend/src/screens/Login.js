@@ -28,6 +28,7 @@ function Login() {
       const response = await fetch("http://localhost:3000/users/login", requestOptions);
       const result = await response.json();
       if (result.message === "Success") {
+        localStorage.setItem('token',result.token)
         navigate("/dashboard", { state: { user: result.user } });
       } 
       else if(response.status === 404){
