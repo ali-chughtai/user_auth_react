@@ -43,6 +43,17 @@ function SignUp() {
         }
     };
 
+    const handleLogin = async(e) => {
+        const token = localStorage.getItem('token');
+        e.preventDefault();
+        if(!token){
+            navigate('/login');
+        }
+        else{
+            navigate('/dashboard')
+        }
+    }
+
 
     return (
         <div className='mainDiv'>
@@ -74,7 +85,7 @@ function SignUp() {
                 />
                 <button type='submit'>Register</button>
             </form>
-            <h6>already have an account? <span style={{userSelect:'none' , textDecoration:'underline' ,  color:'purple' , fontStyle:'italic'}} onClick={() => navigate('/login')} > Sign in</span></h6>
+            <h6>already have an account? <span style={{userSelect:'none' , textDecoration:'underline' ,  color:'purple' , fontStyle:'italic'}} onClick={handleLogin} > Sign in</span></h6>
 
         </div>
     );
