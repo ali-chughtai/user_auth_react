@@ -15,6 +15,8 @@ function ResetPassword() {
   async function handleSubmit(e) {
     e.preventDefault();
 
+    console.log("Reset frontend email =============>>" , email)
+
     if (newPassword !== confirmPassword) {
       setMessage("Passwords do not match");
       return;

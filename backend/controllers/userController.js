@@ -97,8 +97,8 @@ exports.forgotPassword = async (req, res) => {
 };
 
 exports.resetPassword = async (req, res) => {
-  const { newPassword } = req.body;
-  const { email } = req.query; // Use req.query to get the email from the query string
+  const { email, newPassword } = req.body;
+  // const { email } = req.query; // Use req.query to get the email from the query string
 
   console.log("Reset Password user controller route hit ===============" , newPassword , email)
   
