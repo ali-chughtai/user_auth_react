@@ -13,7 +13,9 @@ var usersRouter = require('./routes/user');
 mongoose.connect("mongodb://localhost:27017/user").then(()=>console.log('DB connected')).catch((err)=> console.log(err))
 
 var app = express();
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3001' // Allow requests from frontend
+}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

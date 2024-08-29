@@ -1,41 +1,41 @@
-import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function ResetPassword() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
+  const location = useLocation(); 
   const navigate = useNavigate();
-  const location = useLocation();
 
-  // Extract the token from the URL query parameters
+  // Extract email from the query string
   const searchParams = new URLSearchParams(location.search);
-  const email = searchParams.get('email'); // Get the email from the query string
-  
+  const email = searchParams.get('email');
+
   async function handleSubmit(e) {
     e.preventDefault();
-  
+
     if (newPassword !== confirmPassword) {
       setMessage("Passwords do not match");
       return;
     }
-  
+
     try {
       const response = await fetch('http://localhost:3000/users/resetpassword', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, newPassword }), // Include email in the request
+        body: JSON.stringify({ email, newPassword }),
       });
-  
+
       const data = await response.json();
-  
+
       if (response.ok) {
-        setMessage(data.message); // Show success message
+        setMessage(data.message);
         setTimeout(() => {
           navigate('/login');
-        }, 3000); // Navigate to login after 3 seconds
+        }, 3000);
       } else {
-        setMessage(data.message); // Show error message
+        setMessage(data.message);
       }
     } catch (error) {
       setMessage("An error occurred. Please try again.");
@@ -48,7 +48,6 @@ function ResetPassword() {
         <label>New Password:</label>
         <input
           type="password"
-          placeholder="********"
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
           required
@@ -56,7 +55,6 @@ function ResetPassword() {
         <label>Confirm Password:</label>
         <input
           type="password"
-          placeholder="********"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
