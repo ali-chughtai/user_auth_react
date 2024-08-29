@@ -82,6 +82,7 @@ function Login() {
           />
           <button type="Submit">Login</button>
         </form>
+        <p>Forgot Password? <span onClick={() => navigate('/forgotpassword')}> Click here</span></p>
       </div>
       <button onClick={() => navigate("/")}>Back</button>
     </div>

@@ -33,6 +33,8 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
+app.use(express.static('public')); // Ensure this doesn't interfere with routes
+
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
@@ -43,5 +45,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
 
 module.exports = app;

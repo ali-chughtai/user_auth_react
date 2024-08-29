@@ -6,6 +6,8 @@ import UserDashboard
 import Login from './screens/Login';
 import LandingPage from './screens';
 import SignUp from './screens/Signup'
+import ForgotPassword from './screens/forgotPassword';
+import ResetPassword from './screens/resetPassword';
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
         <Route path='/signup' element={<SignUp/>} />
         <Route path='/dashboard' element={<UserDashboard/>} />
         <Route path='/login' element={<Login/>}/>
+        <Route path='/forgotpassword' element={<ForgotPassword/>} />
+        <Route path='/resetpassword' element={<ResetPassword/>}/>
       </Routes>
     </Router>
   );
