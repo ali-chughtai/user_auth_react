@@ -34,7 +34,7 @@ exports.loginUser = async (req, res) => {
     }
     const token = jwt.sign({user},
       'edhf345h876hrh587i#@485&345&$(*&)4543jggekrer',
-      { expiresIn: '1h' }
+      { expiresIn: '5m' }
     );
     
     console.log("Generated Token:", token); // Debugging line
