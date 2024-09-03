@@ -57,74 +57,75 @@ const transporter = nodemailer.createTransport({
 });
 
 // Function to send password reset email
-const sendResetEmail = (email) => {
-  const resetLink = `http://localhost:3001/resetpassword?email=${email}`;
+// const sendResetEmail = (email) => {
+//   const resetLink = `http://localhost:3001/resetpassword?email=${email}`;
 
-  const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: 'Password Reset Request',
-      html: `<p>You requested a password reset. Click the link below to reset your password:</p>
-             <a href="${resetLink}">${resetLink}</a>`
-  };
+//   const mailOptions = {
+//       from: process.env.EMAIL_USER,
+//       to: email,
+//       subject: 'Password Reset Request',
+//       html: `<p>You requested a password reset. Click the link below to reset your password:</p>
+//              <a href="${resetLink}">${resetLink}</a>`
+//   };
 
-  return transporter.sendMail(mailOptions);
-};
+//   return transporter.sendMail(mailOptions);
+// };
 
 exports.forgotPassword = async (req, res) => {
   const { email } = req.body;
 
   try {
-      // Check if the email exists
-      const user = await User.findOne({ email });
-      console.log("User=============>" , user);
+    // Check if the email exists
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-      if (!user) {
-          return res.status(404).json({ message: "User not found" });
-      }
+    // Generate JWT token for password reset
+    const resetToken = jwt.sign({ email: user.email }, 'edhf345h876hrh587i#@485&345&$(*&)4543jggekrer', { expiresIn: '5m' });
 
-      // Generate JWT token for password reset
-     
-      // Send the email with the reset link
-      await sendResetEmail(email);
+    // Send the email with the reset link
+    const resetLink = `http://localhost:3001/resetpassword?token=${resetToken}`;
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Password Reset Request',
+      html: `<p>You requested a password reset. Click the link below to reset your password:</p>
+             <a href="${resetLink}">Reset Password</a>`
+    };
 
-      res.status(200).json({ message: "Password reset link has been sent to your email." });
+    await transporter.sendMail(mailOptions);
 
+    res.status(200).json({ message: "Password reset link has been sent to your email." });
   } catch (error) {
-      console.error("Error in forgotPassword:", error);
-      res.status(500).json({ message: "Internal server error" });
+    console.error("Error in forgotPassword:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
 exports.resetPassword = async (req, res) => {
-  const { email, newPassword } = req.body;
-  // const { email } = req.query; // Use req.query to get the email from the query string
+  const { token, newPassword } = req.body;
 
-  console.log("Reset Password user controller route hit ===============" , newPassword , email)
-  
   try {
-      // Verify the token (if you have a token verification process)
-     
-      const user = await User.findOne({ email });
-      console.log("User=============>" , user);
-      if (!user) {
-          return res.status(404).json({ message: "User not found" });
-      }
+    // Verify the token
+    const decoded = jwt.verify(token, 'edhf345h876hrh587i#@485&345&$(*&)4543jggekrer');
+    const user = await User.findOne({ email: decoded.email });
 
-      // Hash the new password
-      const hashedPassword = await bcrypt.hash(newPassword, 10);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-      // Update the password
-      user.password = newPassword;
-      await user.save();
+    // Hash the new password and update it
+    // const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = newPassword;
+    await user.save();
 
-      res.status(200).json({ message: "Password has been reset successfully" });
-
+    res.status(200).json({ message: "Password has been reset successfully" });
   } catch (error) {
-      console.error("Error in resetPassword:", error);
-      if (error.name === "TokenExpiredError") {
-          return res.status(400).json({ message: "Reset token has expired" });
-      }
-      res.status(500).json({ message: "Internal server error" });
+    console.error("Error in resetPassword:", error);
+    if (error.name === "TokenExpiredError") {
+      return res.status(400).json({ message: "Reset token has expired" });
+    }
+    res.status(500).json({ message: "Internal server error" });
   }
 };

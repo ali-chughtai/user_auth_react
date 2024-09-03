@@ -8,14 +8,12 @@ function ResetPassword() {
   const location = useLocation(); 
   const navigate = useNavigate();
 
-  // Extract email from the query string
+  // Extract token from the query string
   const searchParams = new URLSearchParams(location.search);
-  const email = searchParams.get('email');
+  const token = searchParams.get('token');
 
   async function handleSubmit(e) {
     e.preventDefault();
-
-    console.log("Reset frontend email =============>>" , email)
 
     if (newPassword !== confirmPassword) {
       setMessage("Passwords do not match");
@@ -26,7 +24,7 @@ function ResetPassword() {
       const response = await fetch('http://localhost:3000/users/resetpassword', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, newPassword }),
+        body: JSON.stringify({ token, newPassword }),
       });
 
       const data = await response.json();
